@@ -1,0 +1,33 @@
+WITH morning_stars AS (
+    SELECT 
+        t1.stock_cd,
+        t1.stock_date AS first_candle_date,
+        t2.stock_date AS doji_candle_date,
+        t3.stock_date AS third_candle_date,
+        t2.close AS doji_close
+    FROM ohlc_table t1
+    JOIN ohlc_table t2 
+        ON t2.stock_cd = t1.stock_cd 
+        AND t2.stock_date = TO_CHAR(TO_DATE(t1.stock_date::TEXT, 'YYYYMMDD') + INTERVAL '1 day', 'YYYYMMDD')::INTEGER
+    JOIN ohlc_table t3 
+        ON t3.stock_cd = t1.stock_cd 
+        AND t3.stock_date = TO_CHAR(TO_DATE(t2.stock_date::TEXT, 'YYYYMMDD') + INTERVAL '1 day', 'YYYYMMDD')::INTEGER
+    WHERE t1.close < t1.open  -- 첫 번째 캔들: 긴 음봉
+    AND t2.close > t2.open 
+    AND (t2.close - t2.open) / NULLIF((t1.open - t1.close), 0) < 0.5  -- 두 번째 캔들: 도지 또는 작은 몸통
+    AND t3.close > t3.open 
+    AND t3.close > t1.open  -- 세 번째 캔들: 긴 양봉, 첫 번째 캔들 중간 이상 돌파
+),
+ranked_morning_stars AS (
+    SELECT *,
+           ROW_NUMBER() OVER (PARTITION BY stock_cd ORDER BY first_candle_date DESC) AS rn
+    FROM morning_stars
+)
+SELECT a.*
+FROM ranked_morning_stars a
+JOIN ranked_morning_stars b 
+    ON a.stock_cd = b.stock_cd 
+    AND a.rn = 1  -- 가장 최근 셋별형
+    AND b.rn = 2  -- 두 번째로 최근 셋별형
+    AND a.doji_close > b.doji_close -- 최근 셋별형의 도지 종가가 더 높은 경우
+ORDER BY a.stock_cd, a.first_candle_date DESC;

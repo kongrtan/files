@@ -6,3 +6,17 @@ Get-AppxPackage -allusers Microsoft.WindowsStore | Foreach {Add-AppxPackage -Dis
 ```
 takeown /f “C:\Program Files\WindowsApps” /r
 ```
+
+2. dynamic tick 기능 해제 
+
+?
+
+dynamic tick은 절전 기술과 관련된 윈도우 기능이라고 해요. 노트북의 배터리를 절약해 주는 기능인데 이 기능에 버그가 생기면 우클릭 시 멈춤 현상이 나타날 수 있다고 해요. 이 기능을 해제하는 것이 두 번째 해결방법입니다. 
+
+?
+
+해제 방법은 역시 1번의 방법과 같이 '명령 프롬프트'에서 bcdedit /set disabledynamictick yes 라는 명령어를 입력해 주시면 됩니다. 이제 아시죠? 윈도우 키 + X 키를 동시에 누르면 명령 프롬프트가 시작됩니다. 
+
+?
+
+역시 bcdedit 띄우고 슬래쉬 set 띄우고 disabledynamictick 띄우고 yes를 친 후 엔터키까지 누르면 끝입니다 .

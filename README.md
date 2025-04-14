@@ -23,7 +23,11 @@ dynamic tick은 절전 기술과 관련된 윈도우 기능이라고 해요. 노
 
 
 HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control
+
 WaitToKillServiceTimeout REG_SZ 1000
 
 
+HKEY_CURRENT_USER\Control Panel\Desktop
+
+WaitToKillAppTimeout  REG_SZ 5000
  

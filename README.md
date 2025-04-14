@@ -20,3 +20,10 @@ dynamic tick은 절전 기술과 관련된 윈도우 기능이라고 해요. 노
 ?
 
 역시 bcdedit 띄우고 슬래쉬 set 띄우고 disabledynamictick 띄우고 yes를 친 후 엔터키까지 누르면 끝입니다 .
+
+
+HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control
+WaitToKillServiceTimeout REG_SZ 1000
+
+
+ 

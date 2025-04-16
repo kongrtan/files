@@ -30,4 +30,23 @@ WaitToKillServiceTimeout REG_SZ 1000
 HKEY_CURRENT_USER\Control Panel\Desktop
 
 WaitToKillAppTimeout  REG_SZ 5000
- 
+
+
+
+다음은 예시로 myapp:// 링크를 클릭하면 C:\Program Files\MyApp\myapp.exe가 실행되게 만드는 방법입니다.
+
+```
+Windows Registry Editor Version 5.00
+
+[HKEY_CLASSES_ROOT\myapp]
+@="URL:MyApp Protocol"
+"URL Protocol"=""
+
+[HKEY_CLASSES_ROOT\myapp\shell]
+
+[HKEY_CLASSES_ROOT\myapp\shell\open]
+
+[HKEY_CLASSES_ROOT\myapp\shell\open\command]
+@="\"C:\\Program Files\\MyApp\\myapp.exe\" \"%1\""
+
+```

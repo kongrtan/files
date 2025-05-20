@@ -1,0 +1,23 @@
+;
+;  Database file ad.about.co.kr.dns for ad.about.co.kr zone.
+;      Zone version:  1
+;
+
+@                       IN  SOA k3lab.  hostmaster. (
+                                1            ; serial number
+                                900          ; refresh
+                                600          ; retry
+                                86400        ; expire
+                                3600       ) ; default TTL
+
+;
+;  Zone NS records
+;
+
+@                       NS      k3lab.
+
+;
+;  Zone records
+;
+
+@                       A       121.53.105.193

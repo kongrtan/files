@@ -22,7 +22,7 @@
 3. **순서**는 다음과 같이 배치:
    - `HTTP Header Authentication Realm`
    - `Local Authentication Realm`
-
+NEXUS_SECURITY_REALMS=HttpHeader,LDAP,LocalAuthorizingRealm
 ---
 
 ## 2. OAuth2 Proxy 설정 파일 (`oauth2_proxy.cfg`)

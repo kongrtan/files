@@ -35,7 +35,9 @@ redirect_url = "http://<your-domain>/oauth2/callback"
 oidc_issuer_url = "https://<issuer-url>/realms/<realm-name>"
 
 http_address = "0.0.0.0:4180"
-cookie_secret = "<랜덤 32바이트 base64 값>"
+#cookie_secret = "<랜덤 32바이트 base64 값>"
+cookie_secret = "SIQHoEqrWfJ/wHJ54F67l6gh9W+MjNYG6Xk4Ggqlubs="
+
 
 email_domains = ["*"]
 upstreams = ["http://nexus:8081/"]

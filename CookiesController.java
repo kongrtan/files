@@ -12,11 +12,11 @@ import java.util.Map;
 @RestController
 public class ApiController {
 
-    @GetMapping("/print-info")
+        @GetMapping("/print-info")
     public Map<String, Object> printRequestInfo(HttpServletRequest request) {
         Map<String, Object> result = new HashMap<>();
 
-        // 🍪 쿠키 출력
+        // ✅ 쿠키 수집
         Map<String, String> cookies = new HashMap<>();
         Cookie[] cookieArr = request.getCookies();
         if (cookieArr != null) {
@@ -26,7 +26,7 @@ public class ApiController {
         }
         result.put("cookies", cookies);
 
-        // 🔍 쿼리 스트링 파라미터 출력
+        // ✅ 쿼리 파라미터 수집
         Map<String, String> queryParams = new HashMap<>();
         Enumeration<String> paramNames = request.getParameterNames();
         while (paramNames.hasMoreElements()) {
@@ -34,6 +34,15 @@ public class ApiController {
             queryParams.put(name, request.getParameter(name));
         }
         result.put("queryParams", queryParams);
+
+        // ✅ 헤더 수집
+        Map<String, String> headers = new HashMap<>();
+        Enumeration<String> headerNames = request.getHeaderNames();
+        while (headerNames.hasMoreElements()) {
+            String name = headerNames.nextElement();
+            headers.put(name, request.getHeader(name));
+        }
+        result.put("headers", headers);
 
         return result;
     }

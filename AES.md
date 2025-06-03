@@ -55,6 +55,15 @@ string query = "userId=admin&role=admin";
 
 string encrypted = AesEncryptor.Encrypt(query, key, iv);
 // 결과 예: Zr65YrPIGh0urFfAY8u2og==
+
+public static string GenerateRandomIVString()
+{
+    const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    var random = new Random();
+    return new string(Enumerable.Repeat(chars, 16)
+        .Select(s => s[random.Next(s.Length)]).ToArray());
+}
+
 ```
 
 ---

@@ -1,0 +1,22 @@
+@startuml
+actor User
+participant React
+participant Backend
+participant Sub-System
+
+== 사용자 링크 클릭 ==
+User -> React : sub-system 이동 버튼 클릭
+
+== 암호화 토큰 요청 ==
+React -> Backend : /generate-encrypted-token 요청
+Backend -> Backend : JWT 생성 및 AES 암호화 (iv 생성 포함)
+Backend -> React : 암호화된 데이터(a), iv 반환
+
+== sub-system 링크 호출 ==
+React -> Sub-System : https://sub-system?jwt={a}&iv={iv} 로 이동
+
+== sub-system 복호화 ==
+Sub-System -> Sub-System : crypto-js로 복호화
+Sub-System -> Sub-System : JSON.parse 또는 인터페이스에 매핑하여 사용
+
+@enduml

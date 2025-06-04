@@ -1,0 +1,31 @@
+@startuml
+actor User
+participant "Main-System FE" as MainFE
+participant "Main-System BE" as MainBE
+participant "Dex (OIDC IdP)" as Dex
+participant "Sub-System FE" as SubFE
+participant "Sub-System BE" as SubBE
+
+== 사용자 로그인 흐름 ==
+User -> MainFE: 로그인 요청
+MainFE -> Dex: 리디렉션 (OIDC Auth 요청)
+Dex -> User: 로그인 화면
+User -> Dex: 자격 입력
+Dex --> MainFE: Redirect with Auth Code
+
+MainFE -> MainBE: 인증 코드 전달
+MainBE -> Dex: /token 요청 (Auth Code)
+Dex --> MainBE: id_token, access_token
+
+MainBE -> MainFE: 토큰 전달
+
+== SSO 전달 ==
+MainFE -> SubFE: Redirect with id_token (ex: query param)
+
+SubFE -> SubBE: 전달받은 id_token 전송
+SubBE -> Dex: 공개키로 id_token 검증
+Dex --> SubBE: 검증 성공
+
+SubBE -> SubFE: 사용자 정보 전달
+SubFE -> User: Sub-System 화면 표시 (SSO 완료)
+@enduml

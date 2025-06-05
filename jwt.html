@@ -1,0 +1,79 @@
+<p data-ke-size="size16">&nbsp;</p>
+<p style="color: #333333; text-align: start;" data-ke-size="size16">JWT(JSON Web Token)는 JSON 포맷을 사용하여 데이터를 안전하게 전송하기 위한 컴팩트하고 자가 포함된 토큰</p>
+<p style="color: #333333; text-align: start;" data-ke-size="size16">주로 사용자 인증 및 정보 교환에 사용되며, 세 가지 주요 부분으로 구성</p>
+<ol style="list-style-type: decimal;" data-ke-list-type="decimal">
+<li><b>Header (헤더)</b>: 토큰의 유형(JWT)과 서명 알고리즘(예: HMAC, RSA)을 지정.</li>
+<li><b>Payload (페이로드)</b>: 사용자 정보 또는 기타 데이터를 담고 있으며, 이는 클레임(claim)이라고도 불리고 이 클레임은 인증 또는 권한 부여와 관련된 정보를 포함할 수 있음.</li>
+<li><b>Signature (서명)</b>: 서명은 토큰의 무결성을 보장하는 역할을 합니다. 헤더와 페이로드를 합친 후 비밀 키로 서명하여 생성됩니다.</li>
+</ol>
+<p style="color: #333333; text-align: start;" data-ke-size="size16">JWT는 주로 OAuth 2.0과 같은 인증 프로토콜에서 사용되며, 클라이언트와 서버 간의 데이터 전송 시 토큰의 무결성과 신뢰성을 보장합니다. 각 부분은 마침표(.)로 구분되며, Base64로 인코딩.</p>
+<div data-message-id="aac9a77e-832f-42a1-a430-3fad067cc54e" data-message-author-role="assistant">
+<p data-ke-size="size16">&nbsp;</p>
+<table style="border-collapse: collapse; width: 100%;" border="1" data-ke-align="alignLeft">
+<tbody>
+<tr>
+<td style="width: 10%;">jwt</td>
+<td style="width: 90%;"><textarea id="tbJwt" style="width: 100%; height: 100px;" spellcheck="false">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c</textarea></td>
+</tr>
+<tr>
+<td style="width: 10%;">분석</td>
+<td style="width: 90%;"><button id="btnAnalysis" class="btn btn-default">분석</button></td>
+</tr>
+<tr>
+<td style="width: 10%;">Header</td>
+<td style="width: 90%;"><textarea id="taHeader" style="width: 100%; height: 100px;" spellcheck="false"> </textarea></td>
+</tr>
+<tr>
+<td style="width: 10%;">Payload</td>
+<td style="width: 90%;"><textarea id="taPayload" style="width: 100%; height: 200px;" spellcheck="false"> </textarea></td>
+</tr>
+<tr>
+<td style="width: 10%;">Signature</td>
+<td style="width: 90%;"><textarea id="taSignature" style="width: 100%; height: 50px;" spellcheck="false"> </textarea></td>
+</tr>
+</tbody>
+</table>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">&nbsp;</p>
+</div>
+<p data-ke-size="size16">&nbsp;</p>
+<script type="text/javascript" src="//rawgit.com/carlo/jquery-base64/master/jquery.base64.min.js"></script>
+<script>
+    $("#btnAnalysis").click(function () {
+        var token = $("#tbJwt").val();
+
+        var parts = token.split('.');
+
+        if (parts.length == 3) {
+            parseJWT(token);
+        }
+    });
+
+    function parseJWT(token) {
+        // JWT는 세 부분으로 나누어져 있음: 헤더, 페이로드, 서명
+        let parts = token.split('.');
+
+        if (parts.length !== 3) {
+            throw new Error('Invalid JWT token format');
+        }
+
+        // 헤더와 페이로드 부분을 Base64 URL 디코딩
+        $("#taHeader").text(JSON.stringify(JSON.parse(base64UrlDecode(parts[0])),null,2));
+        $("#taPayload").text(JSON.stringify(JSON.parse(base64UrlDecode(parts[1])),null,2));
+        $("#taSignature").text(parts[2]);
+    }
+
+    function base64UrlDecode(base64Url) {
+        // Base64 URL 인코딩된 문자열에서 '-'를 '+'로, '_'를 '/'로 바꿉니다.
+        var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+
+        // 패딩을 맞추기 위한 '=' 추가
+        while (base64.length % 4 !== 0) {
+            base64 += '=';
+        }
+
+        // 디코드하고 문자열을 반환합니다.
+        var decodedData = atob(base64);
+        return decodeURIComponent(escape(decodedData));
+    }
+</script>

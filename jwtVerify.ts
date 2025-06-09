@@ -32,6 +32,16 @@ function base64UrlToUint8Array(base64Url: string): Uint8Array {
   return Uint8Array.from(binary, c => c.charCodeAt(0));
 }
 
+function base64UrlToUint8Array(base64Url: string): Uint8Array {
+  const base64 = base64Url
+    .replace(/-/g, '+')
+    .replace(/_/g, '/');
+  const padded = base64 + '='.repeat((4 - base64.length % 4) % 4);
+  const binary = atob(padded);
+  return new Uint8Array([...binary].map(char => char.charCodeAt(0)));
+}
+
+
 async function importRsaPublicKey(pem: string): Promise<CryptoKey> {
   const pemBody = pem
     .replace("-----BEGIN PUBLIC KEY-----", "")

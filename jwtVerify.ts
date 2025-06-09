@@ -39,10 +39,11 @@ async function importRsaPublicKey(pem: string): Promise<CryptoKey> {
     .replace(/\s+/g, "");
 
   const binaryDer = base64UrlToUint8Array(pemBody);
+  const arrayBuffer = binaryDer.buffer.slice(binaryDer.byteOffset, binaryDer.byteOffset + binaryDer.byteLength);
 
   return await crypto.subtle.importKey(
     "spki",
-    binaryDer.buffer,
+    arrayBuffer,
     {
       name: "RSASSA-PKCS1-v1_5",
       hash: "SHA-256",
@@ -51,3 +52,4 @@ async function importRsaPublicKey(pem: string): Promise<CryptoKey> {
     ["verify"]
   );
 }
+

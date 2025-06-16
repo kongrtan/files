@@ -1,0 +1,26 @@
+<script>
+  window.openFullscreenWindow = function (url) {
+    const screenWidth = window.screen.availWidth;
+    const screenHeight = window.screen.availHeight;
+
+    window.open(
+      url,
+      '_blank',
+      `toolbar=no,scrollbars=yes,resizable=yes,top=0,left=0,width=${screenWidth},height=${screenHeight}`
+    );
+  }
+</script>
+
+
+
+@inject IJSRuntime JS
+
+<button @onclick="OpenNewWindow">전체화면 새창 열기</button>
+
+@code {
+    private async Task OpenNewWindow()
+    {
+        var url = "https://example.com"; // 이동할 주소
+        await JS.InvokeVoidAsync("openFullscreenWindow", url);
+    }
+}

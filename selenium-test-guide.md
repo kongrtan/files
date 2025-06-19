@@ -699,3 +699,125 @@ button.login-button
 | 간단한 선택자 빠르게 추출 | SelectorGadget |
 | 정확한 XPath/CSS + 복잡한 구조 | SelectorsHub |
 | QA 테스트 자동화용 | 둘 다 사용 가능 (보완적 활용) |
+
+
+
+# 🎭 Playwright Codegen 사용 가이드 및 C# 코드 샘플
+
+---
+
+## 📌 개요
+
+**Playwright Codegen**은 Microsoft가 만든 Playwright 프레임워크의 기능으로,  
+브라우저에서 사용자의 클릭/입력/이동 등을 **실시간으로 녹화하여 테스트 코드로 자동 변환**해주는 도구입니다.
+
+---
+
+## ✅ 주요 기능
+
+- 브라우저를 열고 모든 동작을 **자동으로 코드화**
+- 지원 언어: **JavaScript**, **Python**, **C#**, **Java**
+- 다양한 브라우저: Chromium, Firefox, WebKit 지원
+- 로그인 흐름, 입력, 선택, 클릭 등 사용자 인터랙션 추적
+
+---
+
+## 🛠️ 설치 방법
+
+### 1. Node.js 설치 (필수)
+- [https://nodejs.org/](https://nodejs.org/)
+
+### 2. Playwright 설치
+
+```bash
+npm init playwright@latest
+```
+
+또는
+
+```bash
+npm i -D @playwright/test
+npx playwright install
+```
+
+---
+
+## 🚀 Codegen 실행 방법
+
+```bash
+npx playwright codegen https://example.com
+```
+
+옵션 예시:
+
+```bash
+npx playwright codegen --target=csharp https://example.com
+```
+
+- --target=csharp : C# 코드로 출력
+- --browser=chromium|firefox|webkit 선택 가능
+
+---
+
+## 🧪 예제 시나리오 (로그인 페이지 자동화)
+
+1. 사이트 진입
+2. 이메일 입력
+3. 비밀번호 입력
+4. 로그인 버튼 클릭
+
+---
+
+## ✨ Codegen 자동 생성 결과 (C# 예제)
+
+```csharp
+using Microsoft.Playwright;
+using System.Threading.Tasks;
+
+class Program
+{
+    public static async Task Main()
+    {
+        using var playwright = await Playwright.CreateAsync();
+        var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions { Headless = false });
+        var page = await browser.NewPageAsync();
+
+        await page.GotoAsync("https://example.com/login");
+
+        await page.FillAsync("input[name='email']", "user@example.com");
+        await page.FillAsync("input[name='password']", "mypassword123");
+        await page.ClickAsync("button[type='submit']");
+
+        // 결과 확인 또는 assert 추가 가능
+    }
+}
+```
+
+---
+
+## 📎 자주 사용하는 Selector 방식
+
+| 방식 | 설명 | 예시 |
+|------|------|------|
+| `text=` | 텍스트 기준 선택 | `text=로그인` |
+| `css=` | CSS Selector | `css=input[name="email"]` |
+| `xpath=` | XPath 사용 | `xpath=//button[text()='Login']` |
+
+---
+
+## 📘 공식 문서
+
+- Playwright Codegen: https://playwright.dev/docs/codegen
+- C# API: https://playwright.dev/dotnet/
+
+---
+
+## ✅ 정리
+
+| 항목 | 내용 |
+|------|------|
+| 녹화 방식 | 브라우저에서 실시간 사용 행위 추적 |
+| 출력 포맷 | JavaScript, Python, C#, Java |
+| 장점 | 빠르고 정확한 자동화 테스트 생성 |
+| 추천 대상 | Selenium보다 더 빠르고 유지보수 쉬운 도구 찾는 경우 |
+

@@ -306,3 +306,90 @@ Storybook + Selenium 테스트 + Excel 문서 동시 활용
 | Annotations | 요소에 설명/주석 추가 | [링크](https://www.figma.com/community/plugin/747985167520091199/Annotations) |
 
 
+
+
+# 🔁 testIds.ts 네이밍 재사용 가이드 (C# + Selenium)
+
+## 🎯 목적
+
+- 프론트엔드에서 정의한 `testIds.ts`의 테스트 식별자를 C# 기반 Selenium 테스트에서 재사용하여 **테스트 유지보수성**과 **일관성** 확보
+
+---
+
+## ✅ 재사용 방법 요약
+
+1. **testIds.ts를 JSON으로 변환** (빌드 또는 배포 시 자동화 가능)
+2. C#에서 이 JSON 파일을 파싱하여 상수로 사용
+3. Selenium에서 `By.CssSelector` 또는 `By.XPath`로 선택
+
+---
+
+## 🧪 예시 1: JSON 변환 후 C#에서 로딩
+
+### testIds.json (FE에서 자동 추출 예시)
+
+```json
+{
+  "button": {
+    "submit": "button-submit"
+  },
+  "form": {
+    "emailInput": "form-email-input"
+  }
+}
+```
+
+### C# 클래스 예시
+
+```csharp
+public static class TestIds
+{
+    public static class Button
+    {
+        public const string Submit = "button-submit";
+    }
+
+    public static class Form
+    {
+        public const string EmailInput = "form-email-input";
+    }
+}
+```
+
+### Selenium 테스트 코드
+
+```csharp
+driver.FindElement(By.CssSelector($"[data-testid='{TestIds.Button.Submit}']")).Click();
+driver.FindElement(By.CssSelector($"[data-testid='{TestIds.Form.EmailInput}']")).SendKeys("user@example.com");
+```
+
+---
+
+## 🔄 자동 변환 팁
+
+- `testIds.ts` → `testIds.json` 변환은 Node.js 스크립트로 자동화
+- 변환 후 C# 템플릿 코드 생성은 T4 템플릿 또는 CodeGen 도구 활용 가능
+
+---
+
+## 📎 보너스: XPath 대신 CSS Selector 사용 권장
+
+- XPath 예:
+  ```csharp
+  By.XPath("//*[@data-testid='button-submit']")
+  ```
+- CSS Selector 예 (더 빠름, 간결):
+  ```csharp
+  By.CssSelector("[data-testid='button-submit']")
+  ```
+
+---
+
+## ✅ 정리
+
+| 항목 | 권장 방식 |
+|------|-----------|
+| FE → BE 공유 방법 | testIds.ts → testIds.json → C# Constants |
+| 테스트 셀렉터 방식 | data-testid 기반 CSS Selector |
+| 관리 방식 | 공통 저장소에 JSON 정의 후 FE/QA 양측 활용 |
+

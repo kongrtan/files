@@ -226,3 +226,83 @@ Primary.parameters = {
 | Header | Logo        | 로고 영역     | `layout-header-logo` | `https://storybook.com/ui-logo` | ⛔ |
 
 > 📎 Excel 파일은 별도 제공됨
+
+
+
+# 🧩 Figma와 테스트 자동화 연동 가이드
+
+## 🎯 목적
+
+- Figma에서 UI 설계 시 `data-testid`를 사전에 정의하여, 프론트엔드 개발과 테스트 자동화에 일관된 기준을 제공
+- 테스트 식별자 누락 방지, 중복 방지, 문서화 자동화 가능
+- Storybook/Excel과 함께 연동하여 품질/테스트 생산성 향상
+
+---
+
+## 🔌 추천 Figma 플러그인
+
+### 1. 🔖 [Figma Tokens (by Jan Six)](https://www.figma.com/community/plugin/843461159747178978/Figma-Tokens)
+
+- 디자인 시스템 토큰(Figma 변수) 정의/적용/내보내기 가능
+- `data-testid` 같은 커스텀 속성을 토큰 형태로 관리 가능
+- JSON 내보내기 → FE/QA 시스템과 연동
+
+**활용 예:**
+- Figma 요소에 `{ data-testid: 'button-submit' }` 같은 JSON 구조를 부여
+- 팀에서 이 데이터를 기준으로 testIds.ts 자동 생성 가능
+
+---
+
+### 2. 🧼 [Design Lint](https://www.figma.com/community/plugin/801560610260462048/Design-Lint)
+
+- 누락된 스타일, 일관되지 않은 속성 탐지
+- `data-testid` 주석 또는 메타데이터 누락 여부 확인을 위한 보조 수단으로 사용
+
+**활용 예:**
+- 버튼 컴포넌트에서 testId가 정의되지 않은 컴포넌트를 감지
+
+---
+
+### 3. 🗂 [Annotations](https://www.figma.com/community/plugin/747985167520091199/Annotations)
+
+- 컴포넌트에 주석 형식으로 설명 추가
+- `testId: button-login-submit` 등 명확히 표시
+
+**활용 예:**
+- QA가 Figma 내 주석에서 테스트 ID를 직접 수집 가능
+
+---
+
+## 🧰 기타 활용 팁
+
+| 기능 | 설명 |
+|------|------|
+| 🔍 검색 | `testId:` 또는 `data-testid:` 문자열 기준으로 전역 검색 |
+| 🧾 Export | Tokens 플러그인으로 `testId 목록`을 JSON으로 추출하여 FE 코드와 연동 |
+| 📊 QA 연계 | Excel 템플릿과 연결하여 Figma 기준의 컴포넌트 정합성 검토 가능 |
+
+---
+
+## 📎 연계 예시 흐름
+
+```text
+Figma (Tokens/Annotation)
+   ⬇
+testId 정의 (JSON / 주석)
+   ⬇
+FE 개발자가 testIds.ts 생성
+   ⬇
+Storybook + Selenium 테스트 + Excel 문서 동시 활용
+```
+
+---
+
+## ✅ 요약
+
+| 플러그인 | 목적 | 링크 |
+|----------|------|------|
+| Figma Tokens | testId, 변수 등 속성 관리 | [링크](https://www.figma.com/community/plugin/843461159747178978/Figma-Tokens) |
+| Design Lint | 누락 검사/일관성 확인 | [링크](https://www.figma.com/community/plugin/801560610260462048/Design-Lint) |
+| Annotations | 요소에 설명/주석 추가 | [링크](https://www.figma.com/community/plugin/747985167520091199/Annotations) |
+
+

@@ -90,3 +90,139 @@
 - Selenium 공식 문서: https://www.selenium.dev/
 - 테스트 ID 가이드: `/docs/test-ids/README.md`
 - 테스트 시나리오 양식: `/test-scenarios/template.md`
+
+
+
+
+# Selenium 기반 테스트 자동화 협업 가이드
+
+## 🧭 목적
+
+- Selenium 자동화 테스트를 테스터 업무 프로세스에 통합
+- 프론트엔드 개발자와 QA 간의 효율적인 협업 체계 수립
+- 테스트의 신뢰성, 유지보수성 향상
+
+---
+
+## 👥 참여자 역할 정의
+
+| 역할 | 책임 |
+|------|------|
+| **QA (테스터)** | 테스트 시나리오 작성, 자동화 구현, 테스트 유지보수 |
+| **FE 개발자** | `data-testid` 제공, UI 변경 공유, 테스트 지원 |
+| **Tech Lead** | 테스트 전략 수립, 도구 선택, 표준 정의 (선택적) |
+
+---
+
+## 🏷️ FE 개발자 규칙 및 의무사항
+
+- 모든 주요 엘리먼트에 `data-testid` 속성 부여
+- `[페이지명]-[컴포넌트명]-[역할]` 형식의 명확한 네이밍
+- 공통 `testIds.ts`에 상수로 정의 및 관리
+- 변경사항 발생 시 QA에 사전 공유
+- 문서화는 `/docs/test-ids/[기능명].md` 형태로 관리
+
+---
+
+## 🧪 QA 규칙 및 의무사항
+
+- `data-testid` 기준 자동화 테스트 작성
+- 테스트 시나리오를 `/test-scenarios/[페이지].md`로 문서화
+- 실패 원인 로깅 및 공유
+- CI/CD 연동하여 자동 테스트 실행
+
+---
+
+## 🧱 테스트 ID 네이밍 예시 (`testIds.ts`)
+
+```ts
+export const TEST_IDS = {
+  layout: {
+    header: 'layout-header',
+    footer: 'layout-footer',
+  },
+  button: {
+    save: 'button-save',
+    cancel: 'button-cancel',
+    submit: 'button-submit',
+  },
+  form: {
+    emailInput: 'form-email-input',
+    passwordInput: 'form-password-input',
+  },
+  modal: {
+    login: 'modal-login',
+    confirm: 'modal-confirm',
+  },
+  table: {
+    row: (id: string) => `table-row-${id}`,
+    cell: (row: string, col: string) => `table-cell-${row}-${col}`,
+  },
+};
+```
+
+---
+
+## 🔍 ESLint 커스텀 룰 예시 (`require-testid.js`)
+
+```js
+module.exports = {
+  meta: {
+    type: 'problem',
+    docs: {
+      description: 'Require data-testid attribute for interactive elements',
+    },
+    messages: {
+      missingTestId: 'Interactive element missing data-testid.',
+    },
+  },
+  create(context) {
+    return {
+      JSXOpeningElement(node) {
+        const interactiveTags = ['button', 'input', 'a', 'select', 'textarea'];
+        if (!interactiveTags.includes(node.name.name)) return;
+
+        const hasTestId = node.attributes.some(attr =>
+          attr.name && attr.name.name === 'data-testid'
+        );
+
+        if (!hasTestId) {
+          context.report({
+            node,
+            messageId: 'missingTestId',
+          });
+        }
+      },
+    };
+  },
+};
+```
+
+---
+
+## 🧩 Storybook 연계
+
+Storybook 스토리 파일에서 다음과 같이 testId 명시:
+
+```tsx
+Primary.parameters = {
+  docs: {
+    description: {
+      story: 'testId: `button-submit`',
+    },
+  },
+};
+```
+
+---
+
+## 📊 Excel 템플릿 샘플
+
+| 페이지 | 컴포넌트명 | 설명 | testId | 스토리북 링크 | 실제 적용 여부 |
+|--------|------------|------|--------|----------------|----------------|
+| Login  | EmailInput | 이메일 입력창 | `form-email-input` | `https://storybook.com/ui-email` | ✅ |
+| Login  | PasswordInput | 비밀번호 입력창 | `form-password-input` | `https://storybook.com/ui-password` | ✅ |
+| Login  | SubmitButton | 로그인 버튼 | `button-login-submit` | `https://storybook.com/ui-login-button` | ✅ |
+| Header | Logo        | 로고 영역     | `layout-header-logo` | `https://storybook.com/ui-logo` | ⛔ |
+
+> 📎 Excel 파일은 별도 제공됨

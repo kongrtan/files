@@ -602,3 +602,100 @@ test('로그인 버튼을 누르면 이벤트가 호출된다', () => {
 | FE 수정 어려운 상태 | SelectorGadget, SelectorsHub로 임시 Selector 추출 |
 | 접근성 대응 UI | `getByRole`, `getByLabelText` |
 | 복잡한 구조 탐색 | XPath (보조적 용도) |
+
+
+
+
+
+# 🧩 SelectorGadget & SelectorsHub 설치 및 사용 가이드
+
+---
+
+## ✅ 1. SelectorGadget (크롬 확장 프로그램)
+
+### 📍 목적
+
+- 클릭만으로 가장 **간단한 CSS Selector**를 추출해주는 크롬 확장 프로그램  
+- `data-testid`가 없는 레거시 페이지에서 유용
+
+### 🔗 설치
+
+- [Chrome Web Store - SelectorGadget](https://chrome.google.com/webstore/detail/selectorgadget/idhccdnokmppcfjgcgjhkepdcbjdgcjo)
+
+### 🛠️ 설치 방법
+
+1. 위 링크 접속
+2. **Chrome에 추가 → 확장 프로그램 설치**
+
+### 🚀 사용 방법
+
+1. 웹사이트 접속
+2. 크롬 상단의 SelectorGadget 아이콘 클릭
+3. 마우스를 가져다 대면 요소가 강조됨
+4. 클릭하면 **CSS Selector가 자동 추출됨**
+5. 하단 Selector 표시창에서 복사
+
+### 🎯 사용 예
+
+```csharp
+driver.FindElement(By.CssSelector(".btn.primary")).Click();
+```
+
+---
+
+## ✅ 2. SelectorsHub (크롬/엣지 확장 프로그램)
+
+### 📍 목적
+
+- **고급 XPath & CSS Selector** 생성기
+- iframe, shadow DOM, SVG 등 복잡한 구조 지원
+- 접근성 속성 검사 기능 포함
+
+### 🔗 설치
+
+- [SelectorsHub 공식 사이트](https://selectorshub.com/)
+- [Chrome Web Store - SelectorsHub](https://chrome.google.com/webstore/detail/selectorshub/xpath-chrome-plugin)
+
+### 🛠️ 설치 방법
+
+1. 위 사이트에서 `Install for Chrome` 클릭
+2. Chrome 웹 스토어에서 설치 진행
+
+### 🚀 사용 방법
+
+1. 웹사이트 열기 → F12(개발자 도구) 실행
+2. `SelectorsHub` 탭 클릭
+3. 요소 클릭 → 자동 Selector 생성
+4. XPath 또는 CSS 복사하여 사용
+
+### 🎯 사용 예
+
+```xpath
+//button[text()='Login']
+```
+
+```css
+button.login-button
+```
+
+---
+
+## 📊 SelectorGadget vs SelectorsHub
+
+| 항목 | SelectorGadget | SelectorsHub |
+|------|----------------|---------------|
+| 설치 위치 | 브라우저 확장 | 브라우저 확장 (DevTools 탭 포함) |
+| 지원 형식 | CSS Selector | XPath + CSS Selector |
+| 구조 지원 | 단순 구조 | iframe, shadow DOM 포함 |
+| 사용 난이도 | 매우 쉬움 | 중급 이상 |
+| 추천 사용 | 빠른 추출 | 고급 요소 대응 필요시 |
+
+---
+
+## ✅ 결론
+
+| 상황 | 추천 도구 |
+|------|-----------|
+| 간단한 선택자 빠르게 추출 | SelectorGadget |
+| 정확한 XPath/CSS + 복잡한 구조 | SelectorsHub |
+| QA 테스트 자동화용 | 둘 다 사용 가능 (보완적 활용) |

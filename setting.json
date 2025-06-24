@@ -1,0 +1,27 @@
+{
+  // 모든 프록시 기능 비활성화
+  "http.proxySupport": "off",
+  "http.proxy": "",
+  "http.systemProxy": "off",
+
+  // 확장 자동 업데이트 차단
+  "extensions.autoUpdate": false,
+  "extensions.autoCheckUpdates": false,
+
+  // GitHub 원격 추천 차단
+  "extensions.ignoreRecommendations": true,
+
+  // 원격 저장소로부터 기능 비활성화
+  "update.mode": "manual",
+
+  // Telemetry 및 리포팅 끄기
+  "telemetry.telemetryLevel": "off",
+  "telemetry.enableCrashReporter": false,
+  "telemetry.enableTelemetry": false,
+  "security.workspace.trust.untrustedFiles": "open",
+  "workbench.enableExperiments": false,
+
+  // 뉴스/가이드 차단
+  "workbench.startupEditor": "none",
+  "workbench.tips.enabled": false
+}

@@ -1,0 +1,28 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: my-ingress
+  namespace: default
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+spec:
+  ingressClassName: nginx  # 사용하는 ingress controller에 따라 변경 필요
+  rules:
+  - host: myapp.example.com
+    http:
+      paths:
+      - path: /api(/|$)(.*)   # /api 및 /api/any/subpath 모두 포함
+        pathType: Prefix
+        backend:
+          service:
+            name: api-service
+            port:
+              number: 80
+
+      - path: /?(.*)  # 루트 경로 포함하여 나머지 경로 처리
+        pathType: Prefix
+        backend:
+          service:
+            name: web-service
+            port:
+              number: 80

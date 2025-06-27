@@ -75,12 +75,11 @@ Windows Registry Editor Version 5.00
 
 ---
 
-## 📌 추가 지원 가능
+```
+reg add "HKCR\notepad" /ve /d "URL:notepad Protocol" /f
+reg add "HKCR\notepad" /v "URL Protocol" /d "" /f
+reg add "HKCR\notepad\shell" /f
+reg add "HKCR\notepad\shell\open" /f
+reg add "HKCR\notepad\shell\open\command" /ve /d "\"C:\Windows\System32\notepad.exe\" \"%1\"" /f
 
-필요하면:
-
-- 레지스트리 배포용 **배치파일**
-- 다른 프로토콜 예시 (**excel, word**)
-- **Edge, IE** 지원 여부
-
-도 정리해드릴 수 있습니다. 말씀해 주세요.
+```
